@@ -1,11 +1,11 @@
-Package: myRpackages
+Package: pkgmeta
 Title: Find details about my R packages
 Version: 0.0.0.9000
 Authors@R: 
     person("Rob", "Hyndman", , "Rob.Hyndman@monash.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2140-5352"))
-Description: Construct a tibble containing information about R packages with
-  specified authors.
+Description: Finds meta data for all packages on CRAN that match a given author 
+  and packages contained in specified github repositories.
 Imports:
   cranlogs,
   desc,
