@@ -51,7 +51,7 @@ get_meta <- function(cran_author = NULL,
     suffix <- c(".zzzz", "")
   }
   both <- dplyr::inner_join(
-      cran_packages |> select(-github_url),
+      cran_packages |> dplyr::select(-github_url),
       github_packages,
       by = "package", suffix = suffix
     ) |>
