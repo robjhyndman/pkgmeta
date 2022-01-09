@@ -1,0 +1,22 @@
+Package: myRpackages
+Title: Find details about my R packages
+Version: 0.0.0.9000
+Authors@R: 
+    person("Rob", "Hyndman", , "Rob.Hyndman@monash.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-2140-5352"))
+Description: Construct a tibble containing information about R packages with
+  specified authors.
+Imports:
+  cranlogs,
+  desc,
+  dplyr,
+  gh,
+  pkgsearch,
+  purrr,
+  stringr,
+  tibble,
+  utils
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
