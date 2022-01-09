@@ -45,11 +45,17 @@ get_meta <- function(cran_author = NULL,
   github_only <- dplyr::anti_join(github_packages, cran_packages, by = "package")
   cran_only <- dplyr::anti_join(cran_packages, github_packages, by = "package")
   if (prefer_cran) {
-    both <- dplyr::inner_join(cran_packages, github_packages, by = "package", suffix = c("", ".zzzz"))
-  } else {
-    both <- dplyr::inner_join(cran_packages, github_packages, by = "package", suffix = c(".zzzz", ""))
+    suffix <- c("", ".zzzz")
   }
-  both <- both |> dplyr::select(-dplyr::ends_with(".zzzz"))
+  else {
+    suffix <- c(".zzzz", "")
+  }
+  both <- dplyr::inner_join(
+      cran_packages |> select(-github_url),
+      github_packages,
+      by = "package", suffix = suffix
+    ) |>
+    dplyr::select(-dplyr::ends_with(".zzzz"))
   all_packages <- dplyr::bind_rows(
     cran_only |> dplyr::mutate(on_cran = TRUE, on_github = FALSE),
     github_only |> dplyr::mutate(on_cran = FALSE, on_github = TRUE),
