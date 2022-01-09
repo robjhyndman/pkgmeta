@@ -14,7 +14,7 @@
 #' @examples
 #' get_meta(cran_author = "Hyndman")
 #' get_meta(github_repos = c("robjhyndman/forecast", "earowang/hts"))
-#' get_meta(cran_author = "Tanaka", github_repos = c("numbats/yowie", "numbats/monash"))
+#' get_meta(cran_author = "Emi Tanaka", github_repos = c("numbats/yowie", "numbats/monash"))
 #' @export
 
 get_meta <- function(cran_author = NULL,
