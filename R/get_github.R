@@ -8,7 +8,7 @@ get_github_packages <- function(repos) {
   title <- version <- date <- authors <- url <- package <- character(length(repos))
   tmp <- tempfile()
   for (i in seq_along(repos)) {
-    date[i] <- gh::gh(paste0("/repos/", repos[i]))$updated_at
+    date[i] <- gh::gh(paste0("/repos/", repos[i]))$pushed_at
     utils::download.file(gh::gh(paste0("/repos/", repos[i], "/contents/DESCRIPTION"))$download_url, tmp)
     package[i] <- desc::desc_get_field("Package", file=tmp)
     title[i] <- desc::desc_get_field("Title", file = tmp)
