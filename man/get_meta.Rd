@@ -19,7 +19,7 @@ get_meta(
 
 \item{start}{Start date for download statistics. Ignored if \code{include_downloads} is \code{FALSE}.}
 
-\item{github_repos}{Character string of github repos}
+\item{github_repos}{Character vector of github repos}
 
 \item{prefer_cran}{When a package is both on CRAN and github, which information should be preferenced?}
 }

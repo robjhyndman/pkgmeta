@@ -9,7 +9,7 @@
 #' @param cran_author Character string to find in CRAN author names
 #' @param include_downloads Should total CRAN downloads since \code{start} be added to the tibble?
 #' @param start Start date for download statistics. Ignored if \code{include_downloads} is \code{FALSE}.
-#' @param github_repos Character string of github repos
+#' @param github_repos Character vector of github repos
 #' @param prefer_cran When a package is both on CRAN and github, which information should be preferenced?
 #' @examples
 #' get_meta(cran_author = "Hyndman")
@@ -26,6 +26,7 @@ get_meta <- function(cran_author = NULL,
     stop("At least one of cran_author and github_repos must be specified.")
   } else if(!is.null(cran_author)) {
     # Get CRAN packages that match the author
+    cran_author <- stringr::str_replace_all(cran_author, " ", "%20")
     cran_packages <- get_cran_packages(cran_author, include_downloads = include_downloads, start = start)
   }
   # Get github packages listed in repos

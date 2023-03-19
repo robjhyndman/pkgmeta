@@ -9,30 +9,17 @@
 get_cran_packages <- function(author,
                               include_downloads = FALSE,
                               start = "2000-01-01") {
-  packages <- pkgsearch::ps(author, size = 100) |>
-    dplyr::filter(purrr::map_lgl(
-      package_data, ~ grepl(author, .x$Author, fixed = TRUE)
-    )) |>
-    dplyr::pull(package)
-  get_meta_cran(packages, include_downloads, start)
+
+  packages <- paste0("https://r-universe.dev/stats/powersearch?limit=100&all=true&q=author%3A",author) |>
+    jsonlite::fromJSON(flatten = TRUE) |>
+    as.data.frame()
+  packages <- packages[,"results.Package"]
+  suppressWarnings(get_meta_cran(packages, include_downloads, start))
 }
 
-#' Return meta data on CRAN packages
-#'
-#' Find meta data for a vector of CRAN packages and return as a tibble.
-#'
-#' @param packages Character vector of CRAN package names
-#' @param include_downloads Should total CRAN downloads since \code{start} be added to the tibble?
-#' @param start Start date for download statistics. Ignored if \code{include_downloads} is \code{FALSE}.
-#' @param github_repos Character string of github repos
-#' @param prefer_cran When a package is both on CRAN and github, which information should be preferenced?
-#' @examples
-#' get_meta(cran_author = "Hyndman")
-#' get_meta(github_repos = c("robjhyndman/forecast", "earowang/hts"))
-#' get_meta(cran_author = "Emi Tanaka", github_repos = c("numbats/yowie", "numbats/monash"))
-#' @export
-
-# Get meta data for vector of packages on CRAN
+# Return meta data on CRAN packages
+#
+# Find meta data for a vector of CRAN packages and return as a tibble.
 get_meta_cran <- function(packages,
                           include_downloads = FALSE,
                           start = "2000-01-01") {

@@ -4,7 +4,7 @@
 \name{pkgmeta-package}
 \alias{pkgmeta}
 \alias{pkgmeta-package}
-\title{pkgmeta: Find details about my R packages}
+\title{pkgmeta: Find details about R packages on CRAN or github}
 \description{
 Finds meta data for all packages on CRAN that match a given author and packages contained in specified github repositories.
 }
