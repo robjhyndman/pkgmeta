@@ -10,6 +10,7 @@ get_cran_packages <- function(author,
                               include_downloads = FALSE,
                               start = "2000-01-01") {
 
+  warning("Not all CRAN packages will be returned, only those on https://r-universe.dev/")
   packages <- paste0("https://r-universe.dev/stats/powersearch?limit=100&all=true&q=author%3A",author) |>
     jsonlite::fromJSON(flatten = TRUE) |>
     as.data.frame()
