@@ -10,11 +10,16 @@ get_cran_packages <- function(author,
                               include_downloads = FALSE,
                               start = "2000-01-01") {
 
-  warning("Not all CRAN packages will be returned, only those on https://r-universe.dev/")
-  packages <- paste0("https://r-universe.dev/stats/powersearch?limit=100&all=true&q=author%3A",author) |>
-    jsonlite::fromJSON(flatten = TRUE) |>
-    as.data.frame()
-  packages <- packages[,"results.Package"]
+  #warning("Not all CRAN packages will be returned, only those on https://r-universe.dev/")
+  #packages <- paste0("https://r-universe.dev/stats/powersearch?limit=100&all=true&q=author%3A",author) |>
+  #  jsonlite::fromJSON(flatten = TRUE) |>
+  #  as.data.frame()
+  #packages <- packages[,"results.Package"]
+  packages <- pkgsearch::ps(author, size = 100) |>
+    dplyr::filter(purrr::map_lgl(
+      package_data, ~ grepl(author, .x$Author, fixed = TRUE)
+    )) |>
+    dplyr::pull(package)
   suppressWarnings(get_meta_cran(packages, include_downloads, start))
 }
 

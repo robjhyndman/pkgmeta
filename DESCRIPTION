@@ -1,6 +1,6 @@
 Package: pkgmeta
 Title: Find details about R packages on CRAN or github
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person("Rob", "Hyndman", , "Rob.Hyndman@monash.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2140-5352"))
@@ -11,8 +11,8 @@ Imports:
   desc,
   dplyr,
   gh,
-  jsonlite,
   pkgsearch,
+  purrr,
   stringr,
   tibble,
   utils
