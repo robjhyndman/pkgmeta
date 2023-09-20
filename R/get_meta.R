@@ -46,10 +46,10 @@ get_meta <- function(cran_author = NULL,
   github_only <- dplyr::anti_join(github_packages, cran_packages, by = "package")
   cran_only <- dplyr::anti_join(cran_packages, github_packages, by = "package")
   if (prefer_cran) {
-    suffix <- c("", ".zzzz")
+    suffix <- c(".zzzz", "")
   }
   else {
-    suffix <- c(".zzzz", "")
+    suffix <- c("", ".zzzz")
   }
   both <- dplyr::inner_join(
       github_packages,
