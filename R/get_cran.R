@@ -15,7 +15,7 @@ get_cran_packages <- function(author,
   #  jsonlite::fromJSON(flatten = TRUE) |>
   #  as.data.frame()
   #packages <- packages[,"results.Package"]
-  packages <- pkgsearch::ps(author, size = 100) |>
+  packages <- pkgsearch::ps(author, size = 10000) |>
     dplyr::filter(purrr::map_lgl(
       package_data, ~ grepl(author, .x$Author, fixed = TRUE)
     )) |>
@@ -95,5 +95,5 @@ get_meta_cran <- function(packages,
   # Fix some variable types
   meta$date <- as.Date(meta$date)
 
-  return(meta)
+  dplyr::arrange(meta, tolower(package))
 }
