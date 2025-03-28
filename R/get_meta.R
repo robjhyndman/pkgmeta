@@ -26,7 +26,7 @@ get_meta <- function(cran_author = NULL,
     stop("At least one of cran_author and github_repos must be specified.")
   } else if(!is.null(cran_author)) {
     # Get CRAN packages that match the author
-    cran_author <- stringr::str_replace_all(cran_author, " ", "%20")
+    #cran_author <- stringr::str_replace_all(cran_author, " ", "%20")
     cran_packages <- get_cran_packages(cran_author, include_downloads = include_downloads, start = start)
   }
   # Get github packages listed in repos
