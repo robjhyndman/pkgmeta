@@ -8,7 +8,8 @@
 
 get_cran_packages <- function(author,
                               include_downloads = FALSE,
-                              start = "2000-01-01") {
+                              start = "2000-01-01",
+                              end = Sys.Date()) {
 
   #warning("Not all CRAN packages will be returned, only those on https://r-universe.dev/")
   #packages <- paste0("https://r-universe.dev/stats/powersearch?limit=100&all=true&q=author%3A",author) |>
@@ -20,7 +21,7 @@ get_cran_packages <- function(author,
       package_data, ~ grepl(author, .x$Author, fixed = TRUE)
     )) |>
     dplyr::pull(package)
-  suppressWarnings(get_meta_cran(packages, include_downloads, start))
+  suppressWarnings(get_meta_cran(packages, include_downloads, start, end))
 }
 
 # Return meta data on CRAN packages
@@ -28,7 +29,8 @@ get_cran_packages <- function(author,
 # Find meta data for a vector of CRAN packages and return as a tibble.
 get_meta_cran <- function(packages,
                           include_downloads = FALSE,
-                          start = "2000-01-01") {
+                          start = "2000-01-01",
+                          end = Sys.Date()) {
   title <- version <- date <- desc <- authors <- github_url <- rep(NA_character_, length(packages))
   url <- cran_url <- paste0("https://CRAN.R-project.org/package=", packages)
   for (i in seq_along(packages)) {
@@ -79,15 +81,15 @@ get_meta_cran <- function(packages,
   meta <- meta[!is.na(title), ]
   # Compute monthly downloads
   if (include_downloads) {
-    downloads <- cranlogs::cran_downloads(packages, from = start) |>
+    downloads <- cranlogs::cran_downloads(packages, from = start, to = end) |>
       dplyr::group_by(package) |>
       dplyr::mutate(cumsum = cumsum(count)) |>
-      dplyr::filter(cumsum > 0) |>
       dplyr::summarise(
-        first_download = min(date),
+        first_download = min(date[cumsum > 0]),
         downloads = max(cumsum),
         .groups = "drop"
       )
+    downloads$first_download[downloads$downloads == 0] <- NA
     # combine information
     meta <- dplyr::left_join(meta, downloads, by = "package")
   }
