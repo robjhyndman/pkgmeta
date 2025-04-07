@@ -1,0 +1,55 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# pkgmeta
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+This package has just one function: `get_meta` which retrieves metadata for R packages from CRAN and GitHub. It can
+optionally return download data for packages on CRAN.
+
+## Installation
+
+You can install the development version of pkgmeta from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("robjhyndman/pkgmeta")
+```
+
+## Example
+
+```{r load}
+library(pkgmeta)
+```
+
+Fetch meta data on all packages by a given author on CRAN:
+
+```{r example1, message=FALSE, warning=FALSE}
+get_meta(cran_author = "Hyndman", include_downloads = TRUE, start = "2024-01-01")
+```
+
+Fetch meta data on a list of packages on CRAN:
+
+```{r example2, message=FALSE, warning=FALSE}
+get_meta(cran_packages = c("vital", "nullabor"), include_downloads = TRUE, start = "2024-01-01")
+```
+
+Fetch meta data on a list of packages on GitHub:
+
+```{r example3, message=FALSE, warning=FALSE}
+get_meta(github_repos = c("robjhyndman/vital", "dicook/nullabor"))
+```
