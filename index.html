@@ -67,10 +67,13 @@
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/robjhyndman/pkgmeta/" class="external-link">pkgmeta</a></span><span class="op">)</span></span></code></pre></div>
-<p>Fetch meta data on all packages by a given author on CRAN:</p>
+<p>Fetch meta data on all packages by a given list of authors on CRAN:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/get_meta.html">get_meta</a></span><span class="op">(</span>cran_author <span class="op">=</span> <span class="st">"Hyndman"</span>, include_downloads <span class="op">=</span> <span class="cn">TRUE</span>, start <span class="op">=</span> <span class="st">"2024-01-01"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 48 × 11</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/get_meta.html">get_meta</a></span><span class="op">(</span></span>
+<span>  cran_authors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Hyndman"</span>, <span class="st">"O'Hara-Wild"</span><span class="op">)</span>,</span>
+<span>  include_downloads <span class="op">=</span> <span class="cn">TRUE</span>, start <span class="op">=</span> <span class="st">"2024-01-01"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 73 × 11</span></span>
 <span><span class="co">#&gt;    package        date       title    description version authors url   cran_url</span></span>
 <span><span class="co">#&gt;    &lt;chr&gt;          &lt;date&gt;     &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   </span></span>
 <span><span class="co">#&gt;  1 bayesforecast  2021-06-17 "Bayesi… "Fit Bayes… 1.0.1   "Asael… http… https:/…</span></span>
@@ -83,11 +86,14 @@
 <span><span class="co">#&gt;  8 eechidna       2021-02-25 "Explor… "Data from… 1.4.1   "Jerem… http… https:/…</span></span>
 <span><span class="co">#&gt;  9 expsmooth      2015-04-09 "Data S… "Data sets… 2.3     "Rob J… http… https:/…</span></span>
 <span><span class="co">#&gt; 10 fable          2024-11-05 "Foreca… "Provides … 0.4.1   "Mitch… http… https:/…</span></span>
-<span><span class="co">#&gt; # ℹ 38 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 63 more rows</span></span>
 <span><span class="co">#&gt; # ℹ 3 more variables: github_url &lt;chr&gt;, first_download &lt;date&gt;, downloads &lt;dbl&gt;</span></span></code></pre></div>
 <p>Fetch meta data on a list of packages on CRAN:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/get_meta.html">get_meta</a></span><span class="op">(</span>cran_packages <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"vital"</span>, <span class="st">"nullabor"</span><span class="op">)</span>, include_downloads <span class="op">=</span> <span class="cn">TRUE</span>, start <span class="op">=</span> <span class="st">"2024-01-01"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/get_meta.html">get_meta</a></span><span class="op">(</span></span>
+<span>  cran_packages <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"vital"</span>, <span class="st">"nullabor"</span><span class="op">)</span>,</span>
+<span>  include_downloads <span class="op">=</span> <span class="cn">TRUE</span>, start <span class="op">=</span> <span class="st">"2024-01-01"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 2 × 11</span></span>
 <span><span class="co">#&gt;   package date       title description version authors url   cran_url github_url</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;     </span></span>
@@ -102,6 +108,19 @@
 <span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;     &lt;chr&gt;                     &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;     </span></span>
 <span><span class="co">#&gt; 1 vital    2025-03-27 Tidy Analysis Tools for … 1.1.0.… "Rob H… http… https://g…</span></span>
 <span><span class="co">#&gt; 2 nullabor 2025-02-10 Tools for Graphical Infe… 0.3.15  "Hadle… http… https://g…</span></span></code></pre></div>
+<p>Combine meta data from CRAN and GitHub:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/get_meta.html">get_meta</a></span><span class="op">(</span></span>
+<span>  cran_packages <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"vital"</span>, <span class="st">"nullabor"</span><span class="op">)</span>,</span>
+<span>  github_repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"robjhyndman/vital"</span>, <span class="st">"dicook/nullabor"</span><span class="op">)</span>,</span>
+<span>  include_downloads <span class="op">=</span> <span class="cn">TRUE</span>, start <span class="op">=</span> <span class="st">"2024-01-01"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 11</span></span>
+<span><span class="co">#&gt;   package date       title description version authors url   cran_url github_url</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;     </span></span>
+<span><span class="co">#&gt; 1 vital   2024-06-21 "Tid… "Analysing… 1.1.0   "Rob H… http… https:/… https://g…</span></span>
+<span><span class="co">#&gt; 2 nullab… 2025-02-10 "Too… "Tools for… 0.3.15  "Hadle… http… https:/… https://g…</span></span>
+<span><span class="co">#&gt; # ℹ 2 more variables: first_download &lt;date&gt;, downloads &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
