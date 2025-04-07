@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# pkgmeta
+# pkgmeta <img src="man/figures/pkgmeta-hex.png" align="right" width = 150 />
 
 <!-- badges: start -->
 

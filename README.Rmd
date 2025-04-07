@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# pkgmeta
+# pkgmeta  <img src="man/figures/pkgmeta-hex.png" align="right" width = 150 />
 
 <!-- badges: start -->
 <!-- badges: end -->
