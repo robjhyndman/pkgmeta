@@ -11,7 +11,8 @@ Finds meta data for all packages on CRAN that match a given author and packages 
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/robjhyndman/pkgmeta}
+  \item \url{https://github.com/robjhyndman/pkgmeta/}
+  \item \url{https://pkg.robjhyndman.com/pkgmeta/}
   \item Report bugs at \url{https://github.com/robjhyndman/pkgmeta/issues}
 }
 
