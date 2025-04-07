@@ -6,22 +6,36 @@
 # Examples
 # get_cran_packages("Hyndman")
 
-get_cran_packages <- function(author,
-                              include_downloads = FALSE,
-                              start = "2000-01-01",
-                              end = Sys.Date()) {
-
-  #warning("Not all CRAN packages will be returned, only those on https://r-universe.dev/")
-  #packages <- paste0("https://r-universe.dev/stats/powersearch?limit=100&all=true&q=author%3A",author) |>
-  #  jsonlite::fromJSON(flatten = TRUE) |>
-  #  as.data.frame()
-  #packages <- packages[,"results.Package"]
-  packages <- pkgsearch::ps(author, size = 10000) |>
-    dplyr::filter(purrr::map_lgl(
-      package_data, ~ grepl(author, .x$Author, fixed = TRUE)
-    )) |>
-    dplyr::pull(package)
-  suppressWarnings(get_meta_cran(packages, include_downloads, start, end))
+get_cran_packages <- function(
+  author,
+  include_downloads = FALSE,
+  start = "2000-01-01",
+  end = Sys.Date()
+) {
+  dest_folder <- tempdir()
+  dest_file <- paste0(dest_folder, "/", author_name)
+  if (include_downloads) {
+    dest_file <- paste0(dest_file, "_", start, "_", end)
+  }
+  dest_file <- paste0(dest_file, ".rds")
+  if (file.exists(dest_file)) {
+    return(readRDS(dest_file))
+  } else {
+    packages <- pkgsearch::ps(author, size = 10000) |>
+      dplyr::filter(purrr::map_lgl(
+        package_data,
+        ~ grepl(author, .x$Author, fixed = TRUE)
+      )) |>
+      dplyr::pull(package)
+    results <- suppressWarnings(get_meta_cran(
+      packages,
+      include_downloads,
+      start,
+      end
+    ))
+    saveRDS(results, dest_file)
+    return(results)
+  }
 }
 
 # Return meta data on CRAN packages
