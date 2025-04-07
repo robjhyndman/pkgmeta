@@ -8,6 +8,8 @@ get_meta(
   cran_author = NULL,
   include_downloads = FALSE,
   start = "2000-01-01",
+  end = Sys.Date(),
+  cran_packages = NULL,
   github_repos = NULL,
   prefer_cran = TRUE
 )
@@ -18,6 +20,10 @@ get_meta(
 \item{include_downloads}{Should total CRAN downloads since \code{start} be added to the tibble?}
 
 \item{start}{Start date for download statistics. Ignored if \code{include_downloads} is \code{FALSE}.}
+
+\item{end}{End date for download statistics. Ignored if \code{include_downloads} is \code{FALSE}.}
+
+\item{cran_packages}{Character vector of CRAN packages. Ignored if \code{cran_author} is provided.}
 
 \item{github_repos}{Character vector of github repos}
 
