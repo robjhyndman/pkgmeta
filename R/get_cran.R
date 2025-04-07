@@ -4,14 +4,25 @@
 # include_downloads Should total CRAN downloads since start be added to the tibble?
 # start Start date for download statistics. Ignored if include_downloads is FALSE.
 # Examples
-# get_cran_packages("Hyndman")
+# get_cran_packages(c("Lydeamore", "Di Cook", "Dianne Cook"))
 
 get_cran_packages <- function(
-  author,
+  authors,
   include_downloads = FALSE,
   start = "2000-01-01",
   end = Sys.Date()
 ) {
+  purrr::map_dfr(authors, get_meta_cran_author,
+    include_downloads = include_downloads,
+    start = start,
+    end = end
+  )
+}
+
+get_meta_cran_author <- function(author,
+                                  include_downloads = FALSE,
+                                  start = "2000-01-01",
+                                  end = Sys.Date()) {
   dest_folder <- tempdir()
   dest_file <- paste0(dest_folder, "/", author)
   if (include_downloads) {

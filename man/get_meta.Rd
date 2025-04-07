@@ -5,7 +5,7 @@
 \title{Return meta data on CRAN and github packages}
 \usage{
 get_meta(
-  cran_author = NULL,
+  cran_authors = NULL,
   include_downloads = FALSE,
   start = "2000-01-01",
   end = Sys.Date(),
@@ -15,7 +15,7 @@ get_meta(
 )
 }
 \arguments{
-\item{cran_author}{Character string to find in CRAN author names}
+\item{cran_authors}{Character vector to find in CRAN author names}
 
 \item{include_downloads}{Should total CRAN downloads since \code{start} be added to the tibble?}
 
@@ -23,7 +23,7 @@ get_meta(
 
 \item{end}{End date for download statistics. Ignored if \code{include_downloads} is \code{FALSE}.}
 
-\item{cran_packages}{Character vector of CRAN packages. Ignored if \code{cran_author} is provided.}
+\item{cran_packages}{Character vector of CRAN packages. Ignored if \code{cran_authors} is provided.}
 
 \item{github_repos}{Character vector of github repos}
 
@@ -37,7 +37,7 @@ CRAN version is preferred when \code{prefer_cran} is \code{TRUE}, otherwise the 
 version is preferred.
 }
 \examples{
-get_meta(cran_author = "Hyndman")
+get_meta(cran_authors = "Hyndman")
 get_meta(github_repos = c("robjhyndman/forecast", "earowang/hts"))
-get_meta(cran_author = "Emi Tanaka", github_repos = c("numbats/yowie", "numbats/monash"))
+get_meta(cran_authors = "Emi Tanaka", github_repos = c("numbats/yowie", "numbats/monash"))
 }
