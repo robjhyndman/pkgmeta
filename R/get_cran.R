@@ -13,7 +13,7 @@ get_cran_packages <- function(
   end = Sys.Date()
 ) {
   dest_folder <- tempdir()
-  dest_file <- paste0(dest_folder, "/", author_name)
+  dest_file <- paste0(dest_folder, "/", author)
   if (include_downloads) {
     dest_file <- paste0(dest_file, "_", start, "_", end)
   }
@@ -87,6 +87,7 @@ get_meta_cran_package <- function(
 
   # URLs
   url <- cran_url <- paste0("https://CRAN.R-project.org/package=", package)
+  github_url <- NA_character_
   if (!is.null(meta$URL)) {
     urls <- gsub("\\n", "", meta$URL)
     urls <- stringr::str_split(urls, ",") |> unlist()

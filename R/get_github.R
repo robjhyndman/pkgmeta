@@ -9,7 +9,7 @@ get_github_packages <- function(repos) {
   for (i in seq_along(repos)) {
     meta[[i]] <- get_gh_package(repos[i])
   }
-  dplyr::bind_rows(meta) |> distinct()
+  dplyr::bind_rows(meta)
 }
 
 
