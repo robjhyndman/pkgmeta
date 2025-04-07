@@ -27,11 +27,14 @@ pak::pak("robjhyndman/pkgmeta")
 library(pkgmeta)
 ```
 
-Fetch meta data on all packages by a given author on CRAN:
+Fetch meta data on all packages by a given list of authors on CRAN:
 
 ``` r
-get_meta(cran_author = "Hyndman", include_downloads = TRUE, start = "2024-01-01")
-#> # A tibble: 48 × 11
+get_meta(
+  cran_authors = c("Hyndman", "O'Hara-Wild"),
+  include_downloads = TRUE, start = "2024-01-01"
+)
+#> # A tibble: 73 × 11
 #>    package        date       title    description version authors url   cran_url
 #>    <chr>          <date>     <chr>    <chr>       <chr>   <chr>   <chr> <chr>   
 #>  1 bayesforecast  2021-06-17 "Bayesi… "Fit Bayes… 1.0.1   "Asael… http… https:/…
@@ -44,14 +47,17 @@ get_meta(cran_author = "Hyndman", include_downloads = TRUE, start = "2024-01-01"
 #>  8 eechidna       2021-02-25 "Explor… "Data from… 1.4.1   "Jerem… http… https:/…
 #>  9 expsmooth      2015-04-09 "Data S… "Data sets… 2.3     "Rob J… http… https:/…
 #> 10 fable          2024-11-05 "Foreca… "Provides … 0.4.1   "Mitch… http… https:/…
-#> # ℹ 38 more rows
+#> # ℹ 63 more rows
 #> # ℹ 3 more variables: github_url <chr>, first_download <date>, downloads <dbl>
 ```
 
 Fetch meta data on a list of packages on CRAN:
 
 ``` r
-get_meta(cran_packages = c("vital", "nullabor"), include_downloads = TRUE, start = "2024-01-01")
+get_meta(
+  cran_packages = c("vital", "nullabor"),
+  include_downloads = TRUE, start = "2024-01-01"
+)
 #> # A tibble: 2 × 11
 #>   package date       title description version authors url   cran_url github_url
 #>   <chr>   <date>     <chr> <chr>       <chr>   <chr>   <chr> <chr>    <chr>     
@@ -69,4 +75,20 @@ get_meta(github_repos = c("robjhyndman/vital", "dicook/nullabor"))
 #>   <chr>    <date>     <chr>                     <chr>   <chr>   <chr> <chr>     
 #> 1 vital    2025-03-27 Tidy Analysis Tools for … 1.1.0.… "Rob H… http… https://g…
 #> 2 nullabor 2025-02-10 Tools for Graphical Infe… 0.3.15  "Hadle… http… https://g…
+```
+
+Combine meta data from CRAN and GitHub:
+
+``` r
+get_meta(
+  cran_packages = c("vital", "nullabor"),
+  github_repos = c("robjhyndman/vital", "dicook/nullabor"),
+  include_downloads = TRUE, start = "2024-01-01"
+)
+#> # A tibble: 2 × 11
+#>   package date       title description version authors url   cran_url github_url
+#>   <chr>   <date>     <chr> <chr>       <chr>   <chr>   <chr> <chr>    <chr>     
+#> 1 vital   2024-06-21 "Tid… "Analysing… 1.1.0   "Rob H… http… https:/… https://g…
+#> 2 nullab… 2025-02-10 "Too… "Tools for… 0.3.15  "Hadle… http… https:/… https://g…
+#> # ℹ 2 more variables: first_download <date>, downloads <dbl>
 ```

@@ -36,20 +36,36 @@ pak::pak("robjhyndman/pkgmeta")
 library(pkgmeta)
 ```
 
-Fetch meta data on all packages by a given author on CRAN:
+Fetch meta data on all packages by a given list of authors on CRAN:
 
 ```{r example1, message=FALSE, warning=FALSE}
-get_meta(cran_author = "Hyndman", include_downloads = TRUE, start = "2024-01-01")
+get_meta(
+  cran_authors = c("Hyndman", "O'Hara-Wild"),
+  include_downloads = TRUE, start = "2024-01-01"
+)
 ```
 
 Fetch meta data on a list of packages on CRAN:
 
 ```{r example2, message=FALSE, warning=FALSE}
-get_meta(cran_packages = c("vital", "nullabor"), include_downloads = TRUE, start = "2024-01-01")
+get_meta(
+  cran_packages = c("vital", "nullabor"),
+  include_downloads = TRUE, start = "2024-01-01"
+)
 ```
 
 Fetch meta data on a list of packages on GitHub:
 
 ```{r example3, message=FALSE, warning=FALSE}
 get_meta(github_repos = c("robjhyndman/vital", "dicook/nullabor"))
+```
+
+Combine meta data from CRAN and GitHub:
+
+```{r example4, message=FALSE, warning=FALSE}
+get_meta(
+  cran_packages = c("vital", "nullabor"),
+  github_repos = c("robjhyndman/vital", "dicook/nullabor"),
+  include_downloads = TRUE, start = "2024-01-01"
+)
 ```
