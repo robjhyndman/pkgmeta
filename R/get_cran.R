@@ -16,7 +16,8 @@ get_cran_packages <- function(
     include_downloads = include_downloads,
     start = start,
     end = end
-  )
+  ) |>
+    dplyr::distinct()
 }
 
 get_meta_cran_author <- function(author,
