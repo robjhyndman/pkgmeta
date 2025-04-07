@@ -38,6 +38,10 @@ get_meta_cran_author <- function(author,
         ~ grepl(author, .x$Author, fixed = TRUE)
       )) |>
       dplyr::pull(package)
+    if(length(packages) == 0) {
+      warning(paste(author, "not on CRAN"))
+      return(NULL)
+    }
     results <- suppressWarnings(get_meta_cran(
       packages,
       include_downloads,
