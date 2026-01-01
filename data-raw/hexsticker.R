@@ -2,6 +2,7 @@ library(cropcircles)
 library(ggplot2)
 library(ggimage)
 library(showtext)
+library(magick)
 
 # choose a font from Google Fonts
 font_add_google("Fira Sans", "firasans")
@@ -49,3 +50,11 @@ ggplot() +
   theme_void()
 
 ggsave("./man/figures/pkgmeta-hex.png", height = 2.5, width = 2.5)
+
+
+# Trim transparent edges
+img <- image_read("./man/figures/pkgmeta-hex.png")
+img_trim <- image_trim(img)
+
+image_write(img_trim, "./man/figures/pkgmeta-hex.png")
+
