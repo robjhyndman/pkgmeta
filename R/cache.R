@@ -49,7 +49,10 @@ workers <- new.env(parent = emptyenv())
 
 n_cores <- function() {
   cores <- getOption("pkgmeta.cores", min(8L, parallel::detectCores()))
-  if (is.na(cores)) 1L else as.integer(cores)
+  cores <- if (is.na(cores)) 1L else as.integer(cores)
+  # R CMD check (and CRAN) allow at most 2 simultaneous processes
+  if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_", ""))) cores <- min(cores, 2L)
+  cores
 }
 
 par_lapply <- function(x, f, ...) {
@@ -58,7 +61,7 @@ par_lapply <- function(x, f, ...) {
     return(lapply(x, f, ...))
   }
   if (is.null(workers$cl)) {
-    cl <- parallel::makePSOCKcluster(n_cores())
+    cl <- parallel::makePSOCKcluster(n)
     dir <- cache_dir()
     parallel::clusterCall(cl, function(dir) {
       options(pkgmeta.cache_dir = dir)
