@@ -24,34 +24,27 @@ get_meta_cran_author <- function(author,
                                   include_downloads = FALSE,
                                   start = "2000-01-01",
                                   end = Sys.Date()) {
-  dest_folder <- tempdir()
-  dest_file <- paste0(dest_folder, "/", author)
+  key <- paste0("author_", author)
   if (include_downloads) {
-    dest_file <- paste0(dest_file, "_", start, "_", end)
+    key <- paste0(key, "_", start, "_", end)
   }
-  dest_file <- paste0(dest_file, ".rds")
-  if (file.exists(dest_file)) {
-    return(readRDS(dest_file))
-  } else {
-    packages <- pkgsearch::ps(author, size = 10000) |>
-      dplyr::filter(purrr::map_lgl(
-        package_data,
-        ~ grepl(author, .x$Author, fixed = TRUE)
-      )) |>
-      dplyr::pull(package)
-    if(length(packages) == 0) {
-      warning(paste(author, "not on CRAN"))
-      return(NULL)
-    }
-    results <- suppressWarnings(get_meta_cran(
-      packages,
-      include_downloads,
-      start,
-      end
-    ))
-    saveRDS(results, dest_file)
-    return(results)
+  cached <- cache_read(key)
+  if (!is.null(cached)) {
+    return(cached)
   }
+  packages <- pkgsearch::ps(author, size = 10000) |>
+    dplyr::filter(purrr::map_lgl(
+      package_data,
+      ~ grepl(author, .x$Author, fixed = TRUE)
+    )) |>
+    dplyr::pull(package)
+  if (length(packages) == 0) {
+    warning(paste(author, "not on CRAN"))
+    return(NULL)
+  }
+  results <- get_meta_cran(packages, include_downloads, start, end)
+  cache_write(key, results)
+  results
 }
 
 # Find meta data for a vector of CRAN packages and return as a tibble.
@@ -61,38 +54,59 @@ get_meta_cran <- function(
   start = "2000-01-01",
   end = Sys.Date()
 ) {
-  meta <- list()
-  for (i in seq_along(packages)) {
-    meta[[i]] <- get_meta_cran_package(
-      packages[i],
-      include_downloads = include_downloads,
-      start = start,
-      end = end
-    )
+  meta <- par_lapply(packages, get_meta_cran_package) |>
+    dplyr::bind_rows()
+  missing <- setdiff(packages, meta$package)
+  if (length(missing) > 0) {
+    warning(paste(missing, "not on CRAN"))
   }
-  meta <- dplyr::bind_rows(meta)
+  if (include_downloads && NROW(meta) > 0) {
+    downloads <- get_cran_downloads(meta$package, start, end)
+    meta <- dplyr::left_join(meta, downloads, by = "package")
+  }
   dplyr::arrange(meta, tolower(package))
+}
+
+# Total downloads and date of first download for a vector of CRAN packages.
+# Uncached packages are requested in a few batched calls to cranlogs
+# (much faster than one call per package).
+get_cran_downloads <- function(packages, start, end, batch_size = 10) {
+  key <- function(pkg) paste0("downloads_", pkg, "_", start, "_", end)
+  cached <- lapply(packages, function(pkg) cache_read(key(pkg)))
+  todo <- packages[vapply(cached, is.null, logical(1))]
+  if (length(todo) > 0) {
+    batches <- split(todo, ceiling(seq_along(todo) / batch_size))
+    fetched <- par_lapply(batches, function(pkgs) {
+      d <- cranlogs::cran_downloads(pkgs, from = start, to = end)
+      if (is.null(d$package)) d$package <- pkgs
+      lapply(pkgs, function(pkg) {
+        x <- d[d$package == pkg, ]
+        tibble::tibble(
+          package = pkg,
+          first_download = if (any(x$count > 0)) min(x$date[x$count > 0]) else as.Date(NA),
+          downloads = sum(x$count, na.rm = TRUE)
+        )
+      })
+    })
+    for (res in unlist(fetched, recursive = FALSE)) {
+      cache_write(key(res$package), res)
+      cached[[match(res$package, packages)]] <- res
+    }
+  }
+  dplyr::bind_rows(cached)
 }
 
 # Return meta data on one CRAN package
 get_meta_cran_package <- function(
-  package,
-  include_downloads = FALSE,
-  start = "2000-01-01",
-  end = Sys.Date()
+  package
 ) {
-  dest_folder <- tempdir()
-  dest_file <- paste0(dest_folder, "/", package)
-  if (include_downloads) {
-    dest_file <- paste0(dest_file, "_", start, "_", end)
-  }
-  dest_file <- paste0(dest_file, ".rds")
-  if (file.exists(dest_file)) {
-    return(readRDS(dest_file))
+  key <- paste0("cran_", package)
+  cached <- cache_read(key)
+  if (!is.null(cached)) {
+    return(cached)
   }
   meta <- try(pkgsearch::cran_package(package), silent = TRUE)
   if ("try-error" %in% class(meta)) {
-    warning(paste(package, "not on CRAN"))
     return(NULL)
   }
   # Authors
@@ -137,13 +151,6 @@ get_meta_cran_package <- function(
     cran_url = cran_url,
     github_url = github_url
   )
-  # Compute monthly downloads
-  if (include_downloads) {
-    downloads <- cranlogs::cran_downloads(package, from = start, to = end)
-    output$first_download = min(downloads$date[downloads$count > 0])
-    output$downloads = sum(downloads$count, na.rm = TRUE)
-  }
-  # Save to file
-  saveRDS(output, dest_file)
+  cache_write(key, output)
   return(output)
 }

@@ -5,20 +5,16 @@
 # get_github_packages(c("robjhyndman/forecast", "earowang/hts"))
 
 get_github_packages <- function(repos) {
-  meta <- list()
-  for (i in seq_along(repos)) {
-    meta[[i]] <- get_gh_package(repos[i])
-  }
-  dplyr::bind_rows(meta)
+  dplyr::bind_rows(par_lapply(repos, get_gh_package))
 }
 
 
 # Get meta data for a single github repo
 get_gh_package <- function(repo) {
-  dest_folder <- tempdir()
-  dest_file <- paste0(dest_folder, "/", sub("/", "_", repo), ".rds")
-  if (file.exists(dest_file)) {
-    return(readRDS(dest_file))
+  key <- paste0("github_", sub("/", "_", repo))
+  cached <- cache_read(key)
+  if (!is.null(cached)) {
+    return(cached)
   }
   date <- gh::gh(paste0("/repos/", repo))$pushed_at
   tmp <- tempfile()
@@ -49,6 +45,6 @@ get_gh_package <- function(repo) {
     url = url,
     github_url = paste0("https://github.com/", repo)
   )
-  saveRDS(output, dest_file)
+  cache_write(key, output)
   return(output)
 }

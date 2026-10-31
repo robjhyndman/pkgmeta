@@ -13,6 +13,12 @@
 #' @param cran_packages Character vector of CRAN packages. Ignored if \code{cran_authors} is provided.
 #' @param github_repos Character vector of github repos
 #' @param prefer_cran When a package is both on CRAN and github, which information should be preferenced?
+#' @section Caching and parallelism:
+#' Results are cached on disk for the rest of the day, so repeated calls (including
+#' from new R sessions) are nearly instant. The cache lives in
+#' `tools::R_user_dir("pkgmeta", "cache")`; set `options(pkgmeta.cache_dir = tempdir())`
+#' to use a per-session cache instead. Web requests are made by up to 8 parallel
+#' worker processes; use `options(pkgmeta.cores = 1)` to turn this off.
 #' @examples
 #' get_meta(cran_authors = "Hyndman")
 #' get_meta(github_repos = c("robjhyndman/forecast", "earowang/hts"))
@@ -26,6 +32,7 @@ get_meta <- function(cran_authors = NULL,
                      cran_packages = NULL,
                      github_repos = NULL,
                      prefer_cran = TRUE) {
+  on.exit(stop_workers())
   if(is.null(cran_authors) & is.null(github_repos) & is.null(cran_packages)) {
     stop("At least one of cran_authors, cran_packages and github_repos must be specified.")
   } else if(!is.null(cran_authors)) {

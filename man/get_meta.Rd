@@ -36,6 +36,15 @@ both on CRAN and github will be combined into a single row. Where meta data clas
 CRAN version is preferred when \code{prefer_cran} is \code{TRUE}, otherwise the github
 version is preferred.
 }
+\section{Caching and parallelism}{
+
+Results are cached on disk for the rest of the day, so repeated calls (including
+from new R sessions) are nearly instant. The cache lives in
+\code{tools::R_user_dir("pkgmeta", "cache")}; set \code{options(pkgmeta.cache_dir = tempdir())}
+to use a per-session cache instead. Web requests are made by up to 8 parallel
+worker processes; use \code{options(pkgmeta.cores = 1)} to turn this off.
+}
+
 \examples{
 get_meta(cran_authors = "Hyndman")
 get_meta(github_repos = c("robjhyndman/forecast", "earowang/hts"))

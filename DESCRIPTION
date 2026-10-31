@@ -7,6 +7,8 @@ Authors@R:
 Description: Finds meta data for all packages on CRAN that match a given author 
   and packages contained in specified github repositories.
 Imports:
+  parallel,
+  tools,
   cranlogs,
   desc,
   dplyr,
