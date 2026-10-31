@@ -17,3 +17,8 @@ Useful links:
 
 **Maintainer**: Rob Hyndman <Rob.Hyndman@monash.com>
 ([ORCID](https://orcid.org/0000-0002-2140-5352))
+
+Authors:
+
+- Rob Hyndman <Rob.Hyndman@monash.com>
+  ([ORCID](https://orcid.org/0000-0002-2140-5352))

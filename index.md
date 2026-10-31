@@ -10,6 +10,7 @@ You can install the development version of pkgmeta from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("robjhyndman/pkgmeta")
 ```
@@ -17,12 +18,14 @@ pak::pak("robjhyndman/pkgmeta")
 ## Example
 
 ``` r
+
 library(pkgmeta)
 ```
 
 Fetch meta data on all packages by a given list of authors on CRAN:
 
 ``` r
+
 get_meta(
   cran_authors = c("Hyndman", "O'Hara-Wild"),
   include_downloads = TRUE, start = "2024-01-01"
@@ -47,6 +50,7 @@ get_meta(
 Fetch meta data on a list of packages on CRAN:
 
 ``` r
+
 get_meta(
   cran_packages = c("vital", "nullabor"),
   include_downloads = TRUE, start = "2024-01-01"
@@ -62,6 +66,7 @@ get_meta(
 Fetch meta data on a list of packages on GitHub:
 
 ``` r
+
 get_meta(github_repos = c("robjhyndman/vital", "dicook/nullabor"))
 #> # A tibble: 2 × 7
 #>   package  date       title                     version authors url   github_url
@@ -73,6 +78,7 @@ get_meta(github_repos = c("robjhyndman/vital", "dicook/nullabor"))
 Combine meta data from CRAN and GitHub:
 
 ``` r
+
 get_meta(
   cran_packages = c("vital", "nullabor"),
   github_repos = c("robjhyndman/vital", "dicook/nullabor"),
