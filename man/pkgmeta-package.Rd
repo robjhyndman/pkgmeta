@@ -20,5 +20,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Rob Hyndman \email{Rob.Hyndman@monash.com} (\href{https://orcid.org/0000-0002-2140-5352}{ORCID})
 
+Authors:
+\itemize{
+  \item Rob Hyndman \email{Rob.Hyndman@monash.com} (\href{https://orcid.org/0000-0002-2140-5352}{ORCID})
+}
+
 }
 \keyword{internal}
